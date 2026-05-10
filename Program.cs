@@ -7,7 +7,7 @@ namespace ImageServer
     {
         static void Main(string[] args)
         {
-            // Konfiguracija
+            
             int port = 5050;
             int maxCacheItems = 5; 
             int workerThreads = 4; 
