@@ -9,10 +9,10 @@ namespace ImageServer
         {
             // Konfiguracija
             int port = 5050;
-            int maxCacheItems = 5; // Ograničenje veličine keša na 5 slika
-            int workerThreads = 4; // Maksimalno 4 paralelne obrade
+            int maxCacheItems = 5; 
+            int workerThreads = 4; 
             
-            // Putanja do root foldera (Slike folder unutar Debug/Release foldera)
+            
             string rootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Slike");
 
             if (!Directory.Exists(rootPath))
