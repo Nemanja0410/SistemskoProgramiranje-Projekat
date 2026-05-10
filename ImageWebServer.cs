@@ -16,7 +16,7 @@ namespace ImageServer
         private readonly int _threadCount;
         private readonly HttpListener _listener;
         
-        // Za sprečavanje Cache Stampede problema
+        
         private readonly Dictionary<string, object> _activeFetches = new Dictionary<string, object>();
 
         public ImageWebServer(int port, string rootPath, int cacheSize, int threadCount)
@@ -34,7 +34,7 @@ namespace ImageServer
             _listener.Start();
             Logger.Log($"Server pokrenut na portu {_port}. Pretraga u: {_rootPath}");
 
-            // Inicijalizacija Pool-a radnih niti
+            
             for (int i = 0; i < _threadCount; i++)
             {
                 Thread t = new Thread(WorkerLoop) { IsBackground = true, Name = $"Worker-{i}" };
@@ -73,7 +73,7 @@ namespace ImageServer
                 return;
             }
 
-            // 1. Provera keša
+            
             if (_cache.TryGet(fileName, out byte[]? data))
             {
                 Logger.Log($"[HIT] Slika '{fileName}' poslata iz keša.");
@@ -81,7 +81,7 @@ namespace ImageServer
                 return;
             }
 
-            // 2. Rešavanje Cache Stampede
+            
             object fileLock;
             lock (_activeFetches)
             {
@@ -95,7 +95,7 @@ namespace ImageServer
             // Samo jedna nit će ući ovde za određeni fajl, ostale čekaju
             lock (fileLock)
             {
-                // Dupla provera: možda je nit koja je bila pre nas upravo napunila keš
+                // Dupla provera
                 if (_cache.TryGet(fileName, out data))
                 {
                     SendImage(response, data!, fileName);
@@ -115,7 +115,7 @@ namespace ImageServer
                     SendResponse(response, $"Fajl '{fileName}' nije pronadjen ili tip nije dozvoljen.", 404);
                 }
 
-                // Sklanjamo lock objekt iz rečnika nakon obrade
+                
                 lock (_activeFetches) { _activeFetches.Remove(fileName); }
             }
         }
@@ -129,7 +129,7 @@ namespace ImageServer
 
             try
             {
-                // Rekurzivna pretraga (SearchOption.AllDirectories)
+                // Rekurzivna pretraga 
                 var files = Directory.GetFiles(_rootPath, fileName, SearchOption.AllDirectories);
                 if (files.Length > 0)
                 {
