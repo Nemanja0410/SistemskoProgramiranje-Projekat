@@ -20,7 +20,7 @@ namespace ImageServer
             {
                 if (_data.TryGetValue(key, out value))
                 {
-                    // Osvežavamo poziciju u LRU listi (pomeramo na kraj)
+                   
                     _lruOrder.Remove(key);
                     _lruOrder.AddLast(key);
                     return true;
@@ -37,7 +37,7 @@ namespace ImageServer
 
                 if (_data.Count >= _maxSize)
                 {
-                    // Izbacujemo najstariji element (sa početka liste)
+                    
                     string oldest = _lruOrder.First!.Value;
                     _lruOrder.RemoveFirst();
                     _data.Remove(oldest);
